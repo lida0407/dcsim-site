@@ -1,0 +1,34 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import TemplateCTA from "../../components/TemplateCTA.astro";
+import { TEMPLATE_VERSION } from "../../config/product";
+import { u } from "../../lib/url";
+const guides = (await getCollection("guides")).sort((a, b) => a.data.order - b.data.order);
+---
+<Base
+  title="Resources: Excel template, guides, calculators — DC Sim"
+  description="Download the import template, see the sample twin, use the calculators and read the guides on rack power, UPS failure, small-room DCIM and tokens per kWh."
+  path="resources/"
+  crumbs={[{ name: "Resources", path: "resources/" }]}
+>
+  <article class="container page">
+    <header class="page-head">
+      <h1>Resources</h1>
+      <p class="direct-answer">Everything you need to try DC Sim without a sales call: the Excel template that becomes a twin, the sample hall built from it, calculators for rack power and tokens per kWh, practical guides, and the changelog of what shipped.</p>
+    </header>
+    <div class="grid grid-3" style="margin-top:20px">
+      <a class="card" href={u("resources/excel-template/")}><h3>Excel template</h3><p class="muted">Version {TEMPLATE_VERSION}. Seven sheets, only Devices required.</p></a>
+      <a class="card" href={u("resources/sample-twin/")}><h3>Sample twin</h3><p class="muted">The demo hall and its filled spreadsheet.</p></a>
+      <a class="card" href={u("resources/calculators/")}><h3>Calculators</h3><p class="muted">Rack power with the 80 % rule; tokens per kWh.</p></a>
+      <a class="card" href={u("resources/guides/")}><h3>Guides</h3><p class="muted">{guides.length} practical guides, more every week.</p></a>
+      <a class="card" href={u("resources/changelog/")}><h3>Changelog</h3><p class="muted">What shipped and what is in progress.</p></a>
+      <a class="card" href={u("integrations/")}><h3>Integrations</h3><p class="muted">Tool-by-tool status and field mappings.</p></a>
+    </div>
+    <h2>Guides</h2>
+    <div class="grid grid-2">
+      {guides.map((g) => <a class="card" href={u(`resources/guides/${g.id}/`)}><h3>{g.data.h1}</h3><p class="muted">{g.data.description}</p></a>)}
+    </div>
+    <TemplateCTA />
+  </article>
+</Base>

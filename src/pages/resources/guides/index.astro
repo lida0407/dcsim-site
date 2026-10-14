@@ -1,0 +1,25 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import TemplateCTA from "../../../components/TemplateCTA.astro";
+import { u } from "../../../lib/url";
+const guides = (await getCollection("guides")).sort((a, b) => a.data.order - b.data.order);
+---
+<Base
+  title="Guides: data center power, failure analysis, DCIM — DC Sim"
+  description="Practical guides for small and mid data centers: rack power capacity planning, UPS failure impact analysis, what a small room needs from DCIM, tokens per kWh."
+  path="resources/guides/"
+  crumbs={[{ name: "Resources", path: "resources/" }, { name: "Guides", path: "resources/guides/" }]}
+>
+  <article class="container page">
+    <p class="crumbs"><a href={u("resources/")}>Resources</a> /</p>
+    <header class="page-head">
+      <h1>Guides</h1>
+      <p class="direct-answer">Short, practical guides for people who run or build small and mid-size data centers. Each one answers a single question, shows the arithmetic, and ends with a sheet or a calculator you can use straight away.</p>
+    </header>
+    <div class="grid grid-2" style="margin-top:20px">
+      {guides.map((g) => <a class="card" href={u(`resources/guides/${g.id}/`)}><h2 style="margin:0 0 8px;font-size:21px">{g.data.h1}</h2><p class="muted">{g.data.description}</p></a>)}
+    </div>
+    <TemplateCTA compact />
+  </article>
+</Base>

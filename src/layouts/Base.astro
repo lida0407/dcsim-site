@@ -1,0 +1,74 @@
+---
+import "../styles/global.css";
+import { getImage } from "astro:assets";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { PRODUCT_NAME, COMPANY, COMPANY_URL, CONTACT_EMAIL } from "../config/product";
+import { SITE_URL } from "../../site.config.mjs";
+import { abs, u } from "../lib/url";
+import ogSrc from "../assets/shots/overview.png";
+
+interface Crumb { name: string; path: string }
+interface Props {
+  title: string;
+  description: string;
+  path: string; // site-relative path without base, e.g. "pricing/"
+  jsonLd?: Record<string, unknown>[];
+  crumbs?: Crumb[];
+  noindex?: boolean;
+}
+const { title, description, path, jsonLd = [], crumbs = [], noindex = false } = Astro.props;
+const canonical = abs(path);
+const og = await getImage({ src: ogSrc, width: 1200, format: "jpg", quality: 80 });
+const ogUrl = new URL(og.src, SITE_URL).href;
+
+const org = {
+  "@type": "Organization",
+  "@id": abs("#org"),
+  name: COMPANY,
+  url: COMPANY_URL,
+  email: CONTACT_EMAIL,
+};
+const graph: Record<string, unknown>[] = [org, ...jsonLd];
+if (crumbs.length) {
+  graph.push({
+    "@type": "BreadcrumbList",
+    itemListElement: [{ name: PRODUCT_NAME, path: "" }, ...crumbs].map((c, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: c.name,
+      item: abs(c.path),
+    })),
+  });
+}
+const ld = JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c");
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#070b12" />
+    <link rel="icon" href={u("favicon.svg")} type="image/svg+xml" />
+    <link rel="sitemap" href={u("sitemap-index.xml")} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={PRODUCT_NAME} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={ld} />
+  </head>
+  <body>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

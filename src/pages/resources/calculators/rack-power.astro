@@ -1,0 +1,32 @@
+---
+import Base from "../../../layouts/Base.astro";
+import RackPowerCalc from "../../../components/RackPowerCalc.astro";
+import Faq from "../../../components/Faq.astro";
+import TemplateCTA from "../../../components/TemplateCTA.astro";
+import { faqLd } from "../../../lib/schema";
+import { u } from "../../../lib/url";
+const faq = [
+  { q: "Why does the surviving PDU carry the whole rack?", a: "In a 2N rack every device has one cord on feed A and one on feed B. When feed A fails, the B cords carry the full load, so the B PDU and its breaker must handle the whole rack under the 80 % rule." },
+  { q: "Why 80 %?", a: "A breaker, PDU or UPS should not carry more than 80 % of its rating continuously; the rest is margin for inrush, imbalance and measurement error. A 32 A breaker at 230 V is 7.36 kW, so about 5.9 kW is usable." },
+  { q: "Which watts should I enter?", a: "Measured draw if you have a week of readings; otherwise a per-model estimate. Nameplate ratings overstate most servers, but a flat percentage of nameplate hides the racks that really run hot." },
+];
+---
+<Base
+  title="Rack power calculator: A/B feeds and the 80 % rule — DC Sim"
+  description="Add up a rack's load, then check whether either PDU can carry the whole rack when one feed fails, against the 80 % breaker rule. Runs in your browser."
+  path="resources/calculators/rack-power/"
+  crumbs={[{ name: "Resources", path: "resources/" }, { name: "Calculators", path: "resources/calculators/" }, { name: "Rack power", path: "resources/calculators/rack-power/" }]}
+  jsonLd={faqLd(faq)}
+>
+  <article class="container page">
+    <p class="crumbs"><a href={u("resources/")}>Resources</a> / <a href={u("resources/calculators/")}>Calculators</a> /</p>
+    <header class="page-head">
+      <h1>Rack power calculator</h1>
+      <p class="direct-answer">Enter the devices in one rack, the voltage, the breaker size and whether the rack is dual-fed. The calculator gives the rack load, the load on each PDU in normal operation, and the load on the surviving PDU when one feed fails, checked against the 80 % rule.</p>
+    </header>
+    <RackPowerCalc />
+    <p>For the method behind it, read <a href={u("resources/guides/rack-power-capacity-planning/")}>rack power capacity planning with a spreadsheet and the 80 % rule</a>. In DC Sim the same check runs for every rack, PDU, panel and UPS at once when you import the Power sheet, and Fail shows the result in 3D.</p>
+    <Faq items={faq} />
+    <TemplateCTA compact />
+  </article>
+</Base>

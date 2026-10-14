@@ -1,0 +1,77 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import Badge from "../../components/Badge.astro";
+import Faq from "../../components/Faq.astro";
+import TemplateCTA from "../../components/TemplateCTA.astro";
+import { faqLd, softwareLd } from "../../lib/schema";
+import { u } from "../../lib/url";
+
+const pages = (await getCollection("pages", (p) => p.data.section === "integrations")).sort((a, b) => a.data.order - b.data.order);
+const faq = [
+  { q: "Which integrations are live today?", a: "None as a live connector yet. Today every tool reaches DC Sim as an export: inventory into the Devices, Racks, Power and Cables sheets, metric history into the Readings sheet. Zabbix and NetBox are the first live connectors and are tested against demo instances before we call them available." },
+  { q: "Will the connectors need inbound access?", a: "No. Live data will come through a small agent inside your network that only dials out over one WebSocket and never listens on a port." },
+  { q: "Will DC Sim write anything into my tools?", a: "No. Reading comes first. Exporting a design back as planned inventory is on the roadmap and will be opt-in per tool." },
+  { q: "My tool is not listed. Can I still use it?", a: "Yes, through the Readings sheet (time, item, metric, value) and the inventory sheets. Tell us which tool you run; connectors are built in order of demand." },
+];
+---
+<Base
+  title="Integrations: Zabbix, NetBox, Prometheus and more — DC Sim"
+  description="DC Sim sits on top of the monitoring and DCIM you already run. Every tool works today through the template sheets; Zabbix and NetBox are the first live connectors."
+  path="integrations/"
+  crumbs={[{ name: "Integrations", path: "integrations/" }]}
+  jsonLd={[softwareLd(), ...faqLd(faq)]}
+>
+  <article class="container page">
+    <header class="page-head">
+      <h1>Works alongside the monitoring you already run</h1>
+      <p class="direct-answer">DC Sim does not replace your monitoring or DCIM. It places their data on the rack, PDU or cooling unit it belongs to and lets you fail things. Today every tool reaches the twin as an export through the template sheets. Zabbix and NetBox are the first live connectors: paste a URL and a read-only token, press Test, preview, import.</p>
+    </header>
+
+    <h2>Status, tool by tool</h2>
+    <div class="status-table-wrap">
+      <table class="status-table">
+        <thead><tr><th scope="col">Tool</th><th scope="col">Status</th><th scope="col">Today</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Readings sheet</strong> (any tool's CSV export)</td>
+            <td><Badge kind="available" /></td>
+            <td>time, item, metric, value: metric history from any monitoring tool, fitted to the twin.</td>
+          </tr>
+          {pages.map((p) => (
+            <tr>
+              <td><a href={u(`${p.id}/`)}>{p.data.navLabel ?? p.data.h1}</a></td>
+              <td>{p.data.badge && <Badge kind={p.data.badge} />}</td>
+              <td>{p.data.badgeNote}</td>
+            </tr>
+          ))}
+          <tr>
+            <td>Redfish BMCs, SNMP UPSes, Home Assistant, Proxmox, GPU telemetry</td>
+            <td><Badge kind="roadmap" /></td>
+            <td>Connectors are built into the agent and are not yet tested against live systems. Readings sheet today.</td>
+          </tr>
+          <tr>
+            <td>BMS (Modbus, BACnet) and fire panels</td>
+            <td><Badge kind="roadmap" /></td>
+            <td>Readings sheet today.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <h2>How a connector will work</h2>
+      <ol>
+        <li><strong>Connect:</strong> choose the source, paste its URL and a read-only API token, press Test. The test shows the version, what it can see (hosts, racks, devices, cables) and whether the permissions are read-only.</li>
+        <li><strong>Preview:</strong> the result is rendered as the template sheets (Devices, Cables, Racks, Power, Networks, Readings) with the same import report and checks as an Excel upload.</li>
+        <li><strong>Import:</strong> confirm, and the twin is built. Re-sync works like a re-upload: you see a change list first.</li>
+      </ol>
+      <p>For your own network, calls run in a small outbound-only agent inside it; tokens never reach the browser.</p>
+      <h2>For tool makers</h2>
+      <p>If you make one of these tools: we read, we never write without opt-in, we name you on your integration page, and we want to be listed where your users look for integrations. See the <a href={u("partners/")}>partner program</a>.</p>
+    </div>
+
+    <Faq items={faq} />
+    <TemplateCTA compact />
+  </article>
+</Base>

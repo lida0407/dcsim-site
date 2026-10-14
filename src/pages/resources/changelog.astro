@@ -1,0 +1,67 @@
+---
+import Base from "../../layouts/Base.astro";
+import Badge from "../../components/Badge.astro";
+import { u } from "../../lib/url";
+// Public wording of the build log (dcsim-plan: share/updatedc.md). Newest first.
+const entries = [
+  {
+    date: "2026-10-14",
+    title: "Template v1.1",
+    items: [
+      "Cables gain a phase column (L1/L2/L3) for power cables; Power gains phase, runtime_min and battery_kwh; Racks gain width_in for 10-inch racks; the power type accepts wall outlet.",
+      "Additions only: nothing was renamed, so v1.0 files still import.",
+    ],
+  },
+  {
+    date: "2026-10-14",
+    title: "One View menu instead of a wall of buttons",
+    items: [
+      "A single View dropdown groups the nine layers (Facility: Floor, Air, Water, Fire, Power · Connectivity: Cabling, Network · IT: Device, Token), with a one-line hint and an issue count per view.",
+      "A Mode dropdown (Design, Monitor, Simulate, Replay) changes the side panel and the primary button; Import is always one click.",
+      "At rest the desktop screen shows six controls plus the time slider; on a phone, four. Views keep 60 frames per second on desktop and phone emulation.",
+    ],
+  },
+  {
+    date: "2026-10-14",
+    title: "Excel import, Cabling, Power and Network views, Fail what-if",
+    items: [
+      "Excel or CSV import with a preview, an import report, checks pinned in 3D and a change list on re-upload. Values only: formulas, macros, encrypted and oversized files are refused.",
+      "Cabling view: every cable routed through rear managers, trays or under the floor; trace any cable end to end.",
+      "Power one-line diagram with A/B paths and load per node, and a Network topology built from the cables. Click any node, Fail, and see what goes dark, what survives on one feed and which services stop.",
+      "Scenario library generated from the model: utility loss, generator failure, feed loss, UPS, cooling and liquid failures, leak, fire, more load.",
+    ],
+  },
+];
+const inProgress = [
+  "Phase-balance checks (80 % per phase, imbalance flagged) and UPS runtime from the sheet",
+  "Unracked devices: rows with an empty U kept as devices outside a rack",
+  "Zabbix and NetBox connectors, tested against demo instances",
+  "A public demo of the English edition",
+  "AI design assistant",
+];
+---
+<Base
+  title="Changelog — DC Sim"
+  description="What shipped in DC Sim and what is in progress: Excel import, Cabling, Power and Network views, Fail what-if, the View menu, template v1.1."
+  path="resources/changelog/"
+  crumbs={[{ name: "Resources", path: "resources/" }, { name: "Changelog", path: "resources/changelog/" }]}
+>
+  <article class="container page">
+    <p class="crumbs"><a href={u("resources/")}>Resources</a> /</p>
+    <header class="page-head">
+      <h1>Changelog</h1>
+      <p class="direct-answer">What shipped, newest first, in plain words. Items that are not shipped yet are listed under In progress with a Roadmap badge; nothing on this site is described as available before it is.</p>
+    </header>
+    <div class="prose">
+      {entries.map((e) => (
+        <section>
+          <h2>{e.title}</h2>
+          <p class="muted small"><time datetime={e.date}>{e.date}</time></p>
+          <ul>{e.items.map((i) => <li>{i}</li>)}</ul>
+        </section>
+      ))}
+      <h2>In progress</h2>
+      <ul>{inProgress.map((i) => <li>{i} <Badge kind="roadmap" /></li>)}</ul>
+    </div>
+  </article>
+</Base>

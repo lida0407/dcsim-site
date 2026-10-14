@@ -1,0 +1,54 @@
+---
+// Rack power calculator: devices per rack -> kW, per-feed load in normal and failover, breaker % against the 80 % rule.
+---
+<section class="calc" id="rack-power-calc" aria-labelledby="rpc-h">
+  <h2 id="rpc-h" style="margin-top:0">Rack power calculator</h2>
+  <p class="small muted">Enter the devices in one rack with their typical draw (measured if you have it, otherwise an estimate per model). Results are estimates.</p>
+  <table class="calc-rows">
+    <thead><tr><th scope="col">Device</th><th scope="col">Qty</th><th scope="col">Watts each</th></tr></thead>
+    <tbody>
+      <tr><td><label for="rp-n1" style="margin:0">1U/2U servers</label></td><td><input id="rp-n1" type="number" min="0" value="12" inputmode="numeric" /></td><td><input id="rp-w1" aria-label="Watts per server" type="number" min="0" value="450" inputmode="numeric" /></td></tr>
+      <tr><td><label for="rp-n2" style="margin:0">GPU nodes</label></td><td><input id="rp-n2" type="number" min="0" value="0" inputmode="numeric" /></td><td><input id="rp-w2" aria-label="Watts per GPU node" type="number" min="0" value="6000" inputmode="numeric" /></td></tr>
+      <tr><td><label for="rp-n3" style="margin:0">Storage shelves</label></td><td><input id="rp-n3" type="number" min="0" value="2" inputmode="numeric" /></td><td><input id="rp-w3" aria-label="Watts per storage shelf" type="number" min="0" value="600" inputmode="numeric" /></td></tr>
+      <tr><td><label for="rp-n4" style="margin:0">Switches and other</label></td><td><input id="rp-n4" type="number" min="0" value="2" inputmode="numeric" /></td><td><input id="rp-w4" aria-label="Watts per switch" type="number" min="0" value="250" inputmode="numeric" /></td></tr>
+    </tbody>
+  </table>
+  <div class="grid grid-3">
+    <div><label for="rp-v">Voltage</label><select id="rp-v"><option value="230" selected>230 V single-phase</option><option value="208">208 V single-phase</option><option value="120">120 V</option></select></div>
+    <div><label for="rp-a">Breaker per PDU</label><select id="rp-a"><option>16</option><option>20</option><option>30</option><option selected>32</option></select></div>
+    <div><label for="rp-f">Feeds</label><select id="rp-f"><option value="2" selected>A + B (dual-corded)</option><option value="1">Single feed</option></select></div>
+  </div>
+  <table aria-live="polite">
+    <tbody>
+      <tr><th scope="row">Rack load</th><td><output id="rp-kw">–</output></td></tr>
+      <tr><th scope="row">Breaker capacity (80 % rule)</th><td><output id="rp-cap">–</output></td></tr>
+      <tr><th scope="row">Each PDU, normal</th><td><output id="rp-norm">–</output></td></tr>
+      <tr><th scope="row">Surviving PDU if one feed fails</th><td><output id="rp-fail">–</output></td></tr>
+    </tbody>
+  </table>
+  <p id="rp-msg" class="small" style="margin-top:10px"></p>
+</section>
+<script>
+  const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const fmt = (kw: number) => `${kw.toFixed(2)} kW`;
+  function calc() {
+    let w = 0;
+    for (let i = 1; i <= 4; i++) w += (Number($(`rp-n${i}`).value) || 0) * (Number($(`rp-w${i}`).value) || 0);
+    const kw = w / 1000;
+    const v = Number($("rp-v").value), a = Number($("rp-a").value), feeds = Number($("rp-f").value);
+    const capKw = (v * a) / 1000;
+    const limit = capKw * 0.8;
+    const normal = kw / feeds;
+    const fail = kw; // with two feeds, the survivor carries everything; with one feed, it already does
+    $("rp-kw").value = `${fmt(kw)} (estimated)`;
+    $("rp-cap").value = `${fmt(capKw)} breaker, ${fmt(limit)} usable at 80 %`;
+    $("rp-norm").value = `${fmt(normal)} · ${Math.round((normal / capKw) * 100)} % of breaker`;
+    $("rp-fail").value = feeds === 2 ? `${fmt(fail)} · ${Math.round((fail / capKw) * 100)} % of breaker` : "single feed: a feed loss takes the rack down";
+    const msg = document.getElementById("rp-msg")!;
+    if (feeds === 1) { msg.className = "small warn"; msg.textContent = "Single feed: this rack has no redundancy. Any breaker, PDU or upstream failure on the feed takes it down."; }
+    else if (fail > limit) { msg.className = "small warn"; msg.textContent = `If feed A fails, the B PDU must carry ${fmt(fail)}, above its 80 % limit of ${fmt(limit)}. This rack is 2N on paper only.`; }
+    else { msg.className = "small ok"; msg.textContent = `Either PDU can carry the whole rack under the 80 % limit, with ${fmt(limit - fail)} to spare.`; }
+  }
+  document.querySelectorAll("#rack-power-calc input, #rack-power-calc select").forEach((el) => el.addEventListener("input", calc));
+  calc();
+</script>

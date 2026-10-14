@@ -1,0 +1,49 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import Faq from "../../../components/Faq.astro";
+import Shot from "../../../components/Shot.astro";
+import TemplateCTA from "../../../components/TemplateCTA.astro";
+import RackPowerCalc from "../../../components/RackPowerCalc.astro";
+import TokensCalc from "../../../components/TokensCalc.astro";
+import { faqLd, articleLd } from "../../../lib/schema";
+import { u } from "../../../lib/url";
+
+export async function getStaticPaths() {
+  const guides = await getCollection("guides");
+  return guides.map((g) => ({ params: { slug: g.id }, props: { guide: g, all: guides } }));
+}
+const { guide, all } = Astro.props;
+const d = guide.data;
+const { Content } = await render(guide);
+const path = `resources/guides/${guide.id}/`;
+const others = all.filter((g) => g.id !== guide.id).sort((a, b) => a.data.order - b.data.order);
+---
+<Base
+  title={d.title}
+  description={d.description}
+  path={path}
+  crumbs={[{ name: "Resources", path: "resources/" }, { name: "Guides", path: "resources/guides/" }, { name: d.h1, path }]}
+  jsonLd={[articleLd(d.h1, d.description, path), ...faqLd(d.faq)]}
+>
+  <article class="container page">
+    <p class="crumbs"><a href={u("resources/")}>Resources</a> / <a href={u("resources/guides/")}>Guides</a> /</p>
+    <header class="page-head">
+      <p class="eyebrow">Guide</p>
+      <h1>{d.h1}</h1>
+      <p class="direct-answer">{d.directAnswer}</p>
+    </header>
+    {d.shots.map((s, i) => <div class="shots"><Shot name={s.name} alt={s.alt} caption={s.caption} eager={i === 0} /></div>)}
+    <div class="prose"><Content /></div>
+    {d.calculator === "rack-power" && <RackPowerCalc />}
+    {d.calculator === "tokens-per-kwh" && <TokensCalc />}
+    <Faq items={d.faq} />
+    <TemplateCTA />
+    {others.length > 0 && (
+      <nav class="section" aria-label="More guides" style="margin-top:40px">
+        <h2 style="margin-top:0">More guides</h2>
+        <div class="grid grid-3">{others.map((g) => <a class="card" href={u(`resources/guides/${g.id}/`)}><h3>{g.data.h1}</h3></a>)}</div>
+      </nav>
+    )}
+  </article>
+</Base>

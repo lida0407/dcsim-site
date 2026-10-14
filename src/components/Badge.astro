@@ -1,0 +1,10 @@
+---
+interface Props { kind: "available" | "partial" | "roadmap" | "early" | "partner"; note?: string }
+const { kind, note } = Astro.props;
+const label = { available: "Available", partial: "Partial", roadmap: "Roadmap", early: "Early access", partner: "Partner" }[kind];
+---
+{note ? (
+  <div><span class={`badge badge-${kind}`}>{label}</span><p class="badge-note">{note}</p></div>
+) : (
+  <span class={`badge badge-${kind}`}>{label}</span>
+)}

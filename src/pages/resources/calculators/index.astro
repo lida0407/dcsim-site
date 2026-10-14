@@ -1,0 +1,22 @@
+---
+import Base from "../../../layouts/Base.astro";
+import { u } from "../../../lib/url";
+---
+<Base
+  title="Calculators: rack power and tokens per kWh — DC Sim"
+  description="Free browser calculators: rack power per feed with the 80 % breaker rule and A/B failover, and tokens per kWh with energy cost per million tokens."
+  path="resources/calculators/"
+  crumbs={[{ name: "Resources", path: "resources/" }, { name: "Calculators", path: "resources/calculators/" }]}
+>
+  <article class="container page">
+    <p class="crumbs"><a href={u("resources/")}>Resources</a> /</p>
+    <header class="page-head">
+      <h1>Calculators</h1>
+      <p class="direct-answer">Two calculators that run in your browser and store nothing. The rack power calculator checks whether either PDU can carry the whole rack when a feed fails. The tokens per kWh calculator turns tokens per second and watts into tokens per kWh and energy cost per million tokens.</p>
+    </header>
+    <div class="grid grid-2" style="margin-top:20px">
+      <a class="card" href={u("resources/calculators/rack-power/")}><h2 style="margin:0 0 8px;font-size:21px">Rack power</h2><p class="muted">Devices per rack, voltage, breaker size and feeds → load per PDU in normal and failover, against the 80 % rule.</p></a>
+      <a class="card" href={u("resources/calculators/tokens-per-kwh/")}><h2 style="margin:0 0 8px;font-size:21px">Tokens per kWh</h2><p class="muted">Tokens per second, server watts, facility overhead and tariff → tokens per kWh and cost per 1M tokens.</p></a>
+    </div>
+  </article>
+</Base>

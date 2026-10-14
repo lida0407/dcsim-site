@@ -1,0 +1,52 @@
+---
+import { PRODUCT_NAME, COMPANY, COMPANY_URL, CONTACT_EMAIL } from "../config/product";
+import { u } from "../lib/url";
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="cols">
+      <div>
+        <h2>Product</h2>
+        <ul>
+          <li><a href={u("product/")}>Overview</a></li>
+          <li><a href={u("product/facility/")}>Facility layers</a></li>
+          <li><a href={u("product/connectivity/")}>Connectivity layers</a></li>
+          <li><a href={u("product/it/")}>IT layers</a></li>
+          <li><a href={u("product/design/")}>Design</a></li>
+          <li><a href={u("product/simulate/")}>Simulate</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Integrations</h2>
+        <ul>
+          <li><a href={u("integrations/zabbix/")}>Zabbix</a></li>
+          <li><a href={u("integrations/netbox/")}>NetBox</a></li>
+          <li><a href={u("integrations/grafana/")}>Grafana and Prometheus</a></li>
+          <li><a href={u("integrations/")}>All integrations</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Resources</h2>
+        <ul>
+          <li><a href={u("resources/excel-template/")}>Excel template</a></li>
+          <li><a href={u("resources/guides/")}>Guides</a></li>
+          <li><a href={u("resources/calculators/")}>Calculators</a></li>
+          <li><a href={u("resources/sample-twin/")}>Sample twin</a></li>
+          <li><a href={u("resources/changelog/")}>Changelog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Company</h2>
+        <ul>
+          <li><a href={COMPANY_URL}>{COMPANY}</a></li>
+          <li><a href={u("partners/")}>Partners</a></li>
+          <li><a href={u("security/")}>Security &amp; data</a></li>
+          <li><a href={u("contact/")}>Contact</a></li>
+          <li><a href={u("legal/privacy/")}>Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="small" style="margin-top:28px">{PRODUCT_NAME} is a product of {COMPANY}. The Chinese-language edition is distributed by CloudSino. · <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> · © {year} {COMPANY}</p>
+  </div>
+</footer>

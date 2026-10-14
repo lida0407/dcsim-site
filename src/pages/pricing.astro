@@ -1,0 +1,118 @@
+---
+import Base from "../layouts/Base.astro";
+import Badge from "../components/Badge.astro";
+import Faq from "../components/Faq.astro";
+import TemplateCTA from "../components/TemplateCTA.astro";
+import { PRICES, mailto } from "../config/product";
+import { faqLd, softwareLd } from "../lib/schema";
+import { u } from "../lib/url";
+
+const faq = [
+  { q: "How is Monitor counted?", a: "Per rack in the model, billed monthly, minimum $49. Empty racks in a design do not count until the room goes live." },
+  { q: "Can I buy online today?", a: "Not yet. Every license starts with a walkthrough on your own file. Self-serve accounts and card checkout are on the roadmap." },
+  { q: "What does \"3 months per project\" mean for Design?", a: "A Design license covers one project for three months of active design; extensions are available if the project runs longer." },
+  { q: "Can I switch from Design to Monitor?", a: "Yes. The design becomes the twin of the running room, and Design customers get the first three months of Monitor free." },
+  { q: "What happens to my data if I stop?", a: "You can export the model as Excel and ask for deletion; deletion is confirmed within 30 days." },
+  { q: "Do partners get a discount on Design?", a: "Yes, a partner price per project under the partner agreement, so the twin can be in the proposal before the customer buys." },
+  { q: "How does this compare with typical DCIM pricing?", a: "Typical DCIM pricing starts at about $125 per month and runs $230–330 per rack per year. Monitor is $5 per rack per month with a $49 minimum, and Design is one-time per project. DC Sim sits on top of DCIM and monitoring rather than replacing them." },
+];
+---
+<Base
+  title="Pricing: Design per project, Monitor per rack — DC Sim"
+  description="Design from $490 per project. Monitor from $5 per rack per month, minimum $49. Partner program with a 30 % margin. Compare with typical DCIM pricing."
+  path="pricing/"
+  crumbs={[{ name: "Pricing", path: "pricing/" }]}
+  jsonLd={[softwareLd(), ...faqLd(faq)]}
+>
+  <article class="container page">
+    <header class="page-head">
+      <h1>Pricing that fits a 10-rack room</h1>
+      <p class="direct-answer">DC Sim has two licenses and a partner program. Design is one-time per project: $490 for up to 20 racks, $1,490 up to 100, $3,900 above that, three months per project. Monitor is about $5 per rack per month with a $49 minimum. Partners earn a 30 % margin. Enterprise and on-prem are quoted.</p>
+      <p class="muted">Today every license starts with a walkthrough on your own file; self-serve accounts and card checkout are on the roadmap. Prices in USD, excluding VAT.</p>
+    </header>
+
+    <div class="grid grid-2" style="margin-top:20px">
+      <div class="card">
+        <h2 style="margin-top:0">Design</h2>
+        <p class="muted">For owners, consultants and integrators planning a new room or an expansion. One-time, three months per project.</p>
+        <ul>
+          {PRICES.design.map((t) => <li><strong>${t.price.toLocaleString("en-US")}</strong> {t.label}</li>)}
+        </ul>
+        <p>Design mode, all checks, N−1 audit, versions, full what-if, Excel export, hand-off to Monitor with three months free.</p>
+        <p class="small">AI design assistant <Badge kind="roadmap" /> early access for Design customers.</p>
+        <a class="btn btn-primary" href={mailto("DC Sim Design license")}>Ask about Design</a>
+      </div>
+      <div class="card">
+        <h2 style="margin-top:0">Monitor</h2>
+        <p class="muted">For operators of a running room. Monthly, cancel any time.</p>
+        <p class="price">${PRICES.monitorPerRack} <small>per rack per month, minimum ${PRICES.monitorMin}</small></p>
+        <p>The twin of your running room: all nine layers, what-if and scenarios, history and replay, reports, token layer, five users. Readings arrive as sheets exported from your monitoring today.</p>
+        <p class="small">Live connectors (Zabbix and NetBox first) <Badge kind="roadmap" /></p>
+        <a class="btn btn-primary" href={mailto("DC Sim Monitor")}>Ask about Monitor</a>
+      </div>
+      <div class="card">
+        <h2 style="margin-top:0">Partner</h2>
+        <p class="muted">For integrators, MSPs, data-center builders, consultants and vendors. Annual agreement.</p>
+        <p class="price">{PRICES.partnerMargin} % <small>margin, or a fee plus a higher margin</small></p>
+        <p>Demo rooms to present from, partner price on Design, white-label on request, training.</p>
+        <a class="btn btn-ghost" href={u("partners/")}>Partner program</a>
+      </div>
+      <div class="card">
+        <h2 style="margin-top:0">Enterprise</h2>
+        <p class="muted">Multi-site operators, on-premises, single sign-on.</p>
+        <p class="price">Quote</p>
+        <p>Everything above plus the on-prem container, SSO, multi-site, custom connectors and an SLA. Later; ask if you need it now.</p>
+        <a class="btn btn-ghost" href={mailto("DC Sim Enterprise")}>Talk to us</a>
+      </div>
+    </div>
+
+    <section class="calc" id="price-calc" aria-labelledby="pc-h" style="margin-top:32px">
+      <h2 id="pc-h" style="margin-top:0">What would my room cost?</h2>
+      <label for="pc-racks">Racks: <output id="pc-n">20</output></label>
+      <input id="pc-racks" type="range" min="1" max="300" value="20" />
+      <table aria-live="polite">
+        <tbody>
+          <tr><th scope="row">Monitor</th><td><output id="pc-mon">–</output></td></tr>
+          <tr><th scope="row">Design (one-time)</th><td><output id="pc-des">–</output></td></tr>
+          <tr><th scope="row">Typical DCIM pricing, same racks</th><td><output id="pc-dcim">–</output></td></tr>
+        </tbody>
+      </table>
+      <p class="small muted" style="margin-top:10px">Typical DCIM pricing: $125 per month minimums and $230–330 per rack per year are typical. Simulation tools for engineers start at several thousand dollars per seat per year and need an engineer; Monitor needs a spreadsheet.</p>
+    </section>
+
+    <section class="section">
+      <h2 style="margin-top:0">Which license do I need?</h2>
+      <ul>
+        <li><strong>"I am planning a room or a new row."</strong> Design. When it goes live, move to Monitor with three months free.</li>
+        <li><strong>"I run a room and want to see it, fail things and report on it."</strong> Monitor.</li>
+        <li><strong>"I do this for customers."</strong> Partner: Design per project at partner price, a share of Monitor.</li>
+      </ul>
+      <h2>Not included (yet)</h2>
+      <ul>
+        <li>CFD-grade airflow: not offered. Thermal values come from a zonal model and are labelled estimated.</li>
+        <li>Phase-balance checks <Badge kind="roadmap" /> (the template has the columns since v1.1).</li>
+        <li>AI design assistant <Badge kind="roadmap" />, live connectors <Badge kind="roadmap" />, partner multi-customer console <Badge kind="roadmap" />.</li>
+        <li>Self-serve accounts and card checkout <Badge kind="roadmap" />; on-prem packaging (Enterprise, later).</li>
+      </ul>
+    </section>
+
+    <Faq items={faq} />
+    <TemplateCTA compact />
+  </article>
+</Base>
+<script>
+  const r = document.getElementById("pc-racks") as HTMLInputElement;
+  const set = (id: string, v: string) => ((document.getElementById(id) as HTMLOutputElement).value = v);
+  const usd = (x: number) => "$" + Math.round(x).toLocaleString("en-US");
+  function calc() {
+    const n = Number(r.value);
+    set("pc-n", String(n));
+    const mon = Math.max(49, 5 * n);
+    set("pc-mon", `${usd(mon)} per month · ${usd(mon * 12)} per year`);
+    set("pc-des", n <= 20 ? "$490" : n <= 100 ? "$1,490" : "$3,900");
+    const lo = Math.max(1500, 230 * n), hi = Math.max(1500, 330 * n);
+    set("pc-dcim", `${usd(lo)}–${usd(hi)} per year`);
+  }
+  r.addEventListener("input", calc);
+  calc();
+</script>

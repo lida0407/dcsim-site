@@ -1,0 +1,32 @@
+---
+import Base from "../../../layouts/Base.astro";
+import TokensCalc from "../../../components/TokensCalc.astro";
+import Faq from "../../../components/Faq.astro";
+import TemplateCTA from "../../../components/TemplateCTA.astro";
+import { faqLd } from "../../../lib/schema";
+import { u } from "../../../lib/url";
+const faq = [
+  { q: "How do I convert joules per token to tokens per kWh?", a: "One kWh is 3.6 million joules, so tokens per kWh = 3,600,000 ÷ joules per token. At 0.5 J per token that is 7.2 million tokens per kWh." },
+  { q: "Which power should I use?", a: "Say which boundary you measured: the GPU alone, the whole server, or the server plus its share of the facility. The same server can differ several times over between the GPU-only and the facility boundary, so compare like with like." },
+  { q: "What is the overhead factor?", a: "The facility's power usage effectiveness (PUE): total facility energy divided by IT energy. 1.0 means the server alone; 1.4 adds 40 % for cooling, UPS losses and the rest of the building." },
+];
+---
+<Base
+  title="Tokens per kWh calculator: energy cost per 1M tokens — DC Sim"
+  description="Turn tokens per second and server watts into tokens per kWh, energy per million tokens and cost per million tokens, with an optional facility overhead factor."
+  path="resources/calculators/tokens-per-kwh/"
+  crumbs={[{ name: "Resources", path: "resources/" }, { name: "Calculators", path: "resources/calculators/" }, { name: "Tokens per kWh", path: "resources/calculators/tokens-per-kwh/" }]}
+  jsonLd={faqLd(faq)}
+>
+  <article class="container page">
+    <p class="crumbs"><a href={u("resources/")}>Resources</a> / <a href={u("resources/calculators/")}>Calculators</a> /</p>
+    <header class="page-head">
+      <h1>Tokens per kWh calculator</h1>
+      <p class="direct-answer">Tokens per kWh is the number of tokens a server produces for each kilowatt-hour it uses: tokens per second × 3,600 ÷ power in kW. Add the facility overhead factor to include cooling and power losses, and a tariff to get the energy cost of a million tokens.</p>
+    </header>
+    <TokensCalc />
+    <p>In DC Sim the Token layer shows this per server and per rack, and every failure scenario reports the tokens it would cost. Read the guide: <a href={u("resources/guides/tokens-per-kwh/")}>tokens per kWh, the one metric for an AI room</a>.</p>
+    <Faq items={faq} />
+    <TemplateCTA compact />
+  </article>
+</Base>

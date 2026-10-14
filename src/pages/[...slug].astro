@@ -1,0 +1,75 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../layouts/Base.astro";
+import Badge from "../components/Badge.astro";
+import Faq from "../components/Faq.astro";
+import Shot from "../components/Shot.astro";
+import TemplateCTA from "../components/TemplateCTA.astro";
+import PricingStrip from "../components/PricingStrip.astro";
+import { faqLd, softwareLd } from "../lib/schema";
+import { u } from "../lib/url";
+
+export async function getStaticPaths() {
+  const pages = await getCollection("pages");
+  return pages.map((page) => ({ params: { slug: page.id }, props: { page, all: pages } }));
+}
+
+const { page, all } = Astro.props;
+const d = page.data;
+const { Content } = await render(page);
+const path = `${page.id}/`;
+
+const sectionInfo = {
+  product: { name: "Product", path: "product/" },
+  integrations: { name: "Integrations", path: "integrations/" },
+  resources: { name: "Resources", path: "resources/" },
+  company: null,
+}[d.section];
+const crumbs = [
+  ...(sectionInfo && page.id !== "product" ? [sectionInfo] : []),
+  { name: d.h1.replace(/[:·].*$/, "").trim(), path },
+];
+const siblings = all
+  .filter((p) => p.data.section === d.section && p.id !== page.id && d.section !== "company")
+  .sort((a, b) => a.data.order - b.data.order);
+const jsonLd = [
+  ...(d.section === "product" || d.section === "integrations" ? [softwareLd()] : []),
+  ...faqLd(d.faq),
+];
+---
+<Base title={d.title} description={d.description} path={path} crumbs={crumbs} jsonLd={jsonLd}>
+  <article class="container page">
+    <p class="crumbs">
+      {sectionInfo && page.id !== "product" && <><a href={u(sectionInfo.path)}>{sectionInfo.name}</a> /</>}
+      {d.section === "product" && page.id === "product" && <span>Product</span>}
+    </p>
+    <header class="page-head">
+      {d.badge && <Badge kind={d.badge} note={d.badgeNote} />}
+      <h1>{d.h1}</h1>
+      <p class="direct-answer">{d.directAnswer}</p>
+    </header>
+    {d.ctaTop && <TemplateCTA />}
+    {d.shots.length > 0 && (
+      <div class={`grid ${d.shots.length > 1 ? "grid-2" : ""} shots`}>
+        {d.shots.map((s, i) => <Shot name={s.name} alt={s.alt} caption={s.caption} eager={i === 0} />)}
+      </div>
+    )}
+    <div class="prose"><Content /></div>
+    <Faq items={d.faq} />
+    {d.section === "product" && <PricingStrip />}
+    {!d.ctaTop && <TemplateCTA compact={d.section === "company"} />}
+    {siblings.length > 0 && (
+      <nav class="section" aria-label="More in this section" style="margin-top:40px">
+        <h2 style="margin-top:0">More in {sectionInfo?.name ?? "this section"}</h2>
+        <div class="grid grid-3">
+          {siblings.map((s) => (
+            <a class="card" href={u(`${s.id}/`)}>
+              <h3>{s.data.navLabel ?? s.data.h1}</h3>
+              {s.data.badge && <Badge kind={s.data.badge} />}
+            </a>
+          ))}
+        </div>
+      </nav>
+    )}
+  </article>
+</Base>

@@ -1,0 +1,16 @@
+---
+import Base from "../layouts/Base.astro";
+import { u } from "../lib/url";
+import { TEMPLATE_FILE } from "../config/product";
+---
+<Base title="Page not found — DC Sim" description="This page does not exist. Try the product overview, the Excel template or the guides." path="404/" noindex>
+  <article class="container page">
+    <h1>This page went dark.</h1>
+    <p class="direct-answer">Nothing lives at this address. Probably a feed we failed on purpose.</p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href={u()}>Home</a>
+      <a class="btn btn-ghost" href={u(TEMPLATE_FILE)} download>Excel template</a>
+      <a class="btn btn-ghost" href={u("resources/guides/")}>Guides</a>
+    </div>
+  </article>
+</Base>

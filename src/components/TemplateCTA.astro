@@ -1,0 +1,16 @@
+---
+import { TEMPLATE_FILE, EXAMPLE_FILE, TEMPLATE_VERSION, mailto } from "../config/product";
+import { u } from "../lib/url";
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+---
+<section class="cta" aria-labelledby="cta-h">
+  <h2 id="cta-h">One Excel file. Your room in 3D.</h2>
+  {!compact && <p>Download the import template (v{TEMPLATE_VERSION}, seven sheets, only Devices required) and the filled example from our demo hall. No form, no email needed, no macros in the files.</p>}
+  <div class="btn-row">
+    <a class="btn btn-primary" href={u(TEMPLATE_FILE)} download>Download the template (.xlsx)</a>
+    <a class="btn btn-ghost" href={u(EXAMPLE_FILE)} download>Download the filled example</a>
+    <a class="btn btn-ghost" href={mailto("DC Sim walkthrough", "Hi Da,\n\nI'd like a walkthrough of DC Sim with our own file.\n\nRacks: \nCompany: \n")}>Request a walkthrough</a>
+  </div>
+  <p class="small muted" style="margin:12px 0 0">Fill in the Devices sheet and send it with your walkthrough request; we import it on the call. <a href={u("resources/excel-template/")}>What each sheet does</a></p>
+</section>

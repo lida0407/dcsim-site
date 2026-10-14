@@ -1,0 +1,13 @@
+---
+import { PRICES } from "../config/product";
+import { u } from "../lib/url";
+---
+<section class="section" aria-labelledby="ps-h">
+  <h2 id="ps-h" style="margin-top:0">Pricing that fits a 10-rack room</h2>
+  <div class="grid grid-3">
+    <div class="card"><h3>Design</h3><p class="price">from ${PRICES.design[0].price} <small>per project, one-time</small></p><p class="muted">Plan a room or a new row; three months per project.</p></div>
+    <div class="card"><h3>Monitor</h3><p class="price">${PRICES.monitorPerRack} <small>per rack per month, min ${PRICES.monitorMin}</small></p><p class="muted">The twin of a running room, with what-if and reports.</p></div>
+    <div class="card"><h3>Partner</h3><p class="price">{PRICES.partnerMargin} % <small>margin</small></p><p class="muted">For integrators, MSPs and consultants.</p></div>
+  </div>
+  <p style="margin-top:14px"><a href={u("pricing/")}>Compare with typical DCIM pricing</a></p>
+</section>
