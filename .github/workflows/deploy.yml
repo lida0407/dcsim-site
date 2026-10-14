@@ -19,16 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npm run build
+      # DC Sim moved to rack-density.com/dc/ (2026-10-15): publish the committed redirect pages, not the site.
+      # Regenerate with `npm run build && node scripts/redirects.mjs` if routes change.
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: redirects
 
   deploy:
     needs: build

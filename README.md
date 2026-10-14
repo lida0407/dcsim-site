@@ -1,3 +1,6 @@
+> **Moved (2026-10-15):** DC Sim now lives at https://rack-density.com/dc/ (repo lida0407/rack-density-site, `src/pages/dc/**`).
+> This repo only publishes `redirects/` to GitHub Pages: every old URL forwards to the same path under rack-density.com/dc/.
+
 # dcsim-site
 
 Static marketing site for **DC Sim** (a Sensaka product), built with Astro and deployed to GitHub Pages by `.github/workflows/deploy.yml` on every push to `main`.

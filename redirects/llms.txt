@@ -1,0 +1,3 @@
+# DC Sim
+
+DC Sim has moved to https://rack-density.com/dc/ — see https://rack-density.com/llms.txt
