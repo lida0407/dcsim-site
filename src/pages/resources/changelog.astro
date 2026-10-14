@@ -6,9 +6,12 @@ import { u } from "../../lib/url";
 const entries = [
   {
     date: "2026-10-14",
-    title: "Template v1.1",
+    title: "Template v1.1: phase balance, UPS runtime from your sheet, unracked devices",
     items: [
-      "Cables gain a phase column (L1/L2/L3) for power cables; Power gains phase, runtime_min and battery_kwh; Racks gain width_in for 10-inch racks; the power type accepts wall outlet.",
+      "Phase balance: with phases on power cables and power items (L1/L2/L3), every three-phase node shows its per-phase load; a phase above 80 % of its share, or an imbalance above 15 %, is flagged. Without phase data the import report says so.",
+      "UPS runtime comes from your runtime_min or battery_kwh first, then the catalog, otherwise it is estimated and labelled; failing one UPS shortens the other's runtime with its new load.",
+      "Devices with an empty U are kept as devices outside a rack, on an open shelf named after their location, instead of being skipped.",
+      "Mini racks: width_in = 10 draws a 10-inch rack (also inferred from the rack name). The power type accepts wall outlet.",
       "Additions only: nothing was renamed, so v1.0 files still import.",
     ],
   },
@@ -33,16 +36,14 @@ const entries = [
   },
 ];
 const inProgress = [
-  "Phase-balance checks (80 % per phase, imbalance flagged) and UPS runtime from the sheet",
-  "Unracked devices: rows with an empty U kept as devices outside a rack",
-  "Zabbix and NetBox connectors, tested against demo instances",
+  "Zabbix and NetBox connectors (paste URL and read-only token, Test, preview, import), tested against demo instances",
   "A public demo of the English edition",
   "AI design assistant",
 ];
 ---
 <Base
   title="Changelog — DC Sim"
-  description="What shipped in DC Sim and what is in progress: Excel import, Cabling, Power and Network views, Fail what-if, the View menu, template v1.1."
+  description="What shipped in DC Sim and what is in progress: template v1.1 with phase balance and UPS runtime, the View menu, Excel import, Cabling, Power and Network views."
   path="resources/changelog/"
   crumbs={[{ name: "Resources", path: "resources/" }, { name: "Changelog", path: "resources/changelog/" }]}
 >

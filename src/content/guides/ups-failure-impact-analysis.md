@@ -23,8 +23,8 @@ A single point of failure in a data center is anything that puts a service on th
 ## 2. Minutes 0–8: map the chain in two sheets
 
 The DC Sim template uses these columns:
-- **Devices:** `rack`, `u`, `model`, `name`, `power_cords` (A, B or AB) and `runs` (services on the device, separated by semicolons). Give shelf devices a rack and U for now: rows with an empty `u` are skipped until unracked devices are supported (on the roadmap).
-- **Power:** `name`, `type` (utility, generator, ATS, UPS, panel, breaker, PDU), `rating` (11 kVA, 16 A, 22 kW), `fed_from`, `feed` (A or B), `rack`, `voltage`, `phases`, and for each UPS `runtime_min` (from the vendor's runtime table) or `battery_kwh`: both columns are in template v1.1, and using them in the runtime check is on the roadmap.
+- **Devices:** `rack`, `u`, `model`, `name`, `power_cords` (A, B or AB) and `runs` (services on the device, separated by semicolons). An empty `u` means not in a rack: the device is kept on an open shelf named by `rack`, so a switch on a desk still counts.
+- **Power:** `name`, `type` (utility, generator, ATS, UPS, panel, breaker, PDU), `rating` (11 kVA, 16 A, 22 kW), `fed_from`, `feed` (A or B), `rack`, `voltage`, `phases`, and for each UPS either `runtime_min` (from the vendor's runtime table) or `battery_kwh`.
 
 Add **Cables** of type power for exact PSU-to-outlet mapping. If your inventory already has rack, U and model, the eight minutes go on `power_cords` and `fed_from`. Walk the room for the racks nobody is sure about.
 
@@ -34,7 +34,7 @@ Import runs checks that find many single points of failure before any simulation
 1. **Single-corded devices** on racks meant to be 2N.
 2. **Same-feed devices:** two PSUs, both on feed A.
 3. **PDU or breaker over 80 %** of its rating.
-4. **UPS runtime under 5 minutes** at current load. When the catalog has no runtime table for the UPS, runtime is estimated, and the check says so.
+4. **UPS runtime under 5 minutes** at current load. With no `runtime_min`, no `battery_kwh` and no catalog entry, runtime is estimated, and the check says so.
 5. **No PDU known for a rack:** the power path is assumed. Fix the sheet first.
 
 Fix the cheap ones now. Re-cording a same-feed server costs a maintenance window, not money.
@@ -59,7 +59,7 @@ These are sums across racks and cords. That is why a rack-by-rack spreadsheet mi
 
 Fail is instant, and exact for the chain you described. It does not say *when* things happen.
 
-**Runtime on the survivor.** The surviving UPS now carries both sides. If the utility drops before the failed unit is back, its batteries run at that load. The diagram shows load % and runtime per UPS after the fail. Runtime comes from the catalog's runtime table for that model, else it is **estimated**; using your own `runtime_min` and `battery_kwh` values (template v1.1) is on the roadmap. A first-order check: minutes ≈ usable kWh × 60 ÷ load in kW. 2 kWh at 4 kW is 2 × 60 ÷ 4 = 30 minutes. At 8 kW it is 15, and less in practice, because batteries deliver less energy at high discharge rates.
+**Runtime on the survivor.** The surviving UPS now carries both sides. If the utility drops before the failed unit is back, its batteries run at that load. The diagram shows load % and runtime per UPS after the fail. Runtime comes from your `runtime_min`, else `battery_kwh`, else the catalog's runtime table for that model, else it is **estimated**. A first-order check: minutes ≈ usable kWh × 60 ÷ load in kW. 2 kWh at 4 kW is 2 × 60 ÷ 4 = 30 minutes. At 8 kW it is 15, and less in practice, because batteries deliver less energy at high discharge rates.
 
 **Simulate it** replays the failure on a timeline next to an untouched baseline: batteries, generator start, breaker trip curves, thermal transients and, for GPU nodes, tokens lost. A breaker at 109 % does not trip at once. Its trip curve decides when, and the timeline shows it (estimated). Temperatures come from a zonal model, not CFD.
 

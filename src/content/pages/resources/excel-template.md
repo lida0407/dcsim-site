@@ -1,6 +1,6 @@
 ---
 title: "Free data center Excel template: racks, devices, power, cables"
-description: "One file, seven sheets, only Devices required. Fill it in and import it to get a 3D twin with power, cooling, cabling and network checks. Version 1.1."
+description: "One file, seven sheets, only Devices required. Import it for a 3D twin with power, phase, cooling, cabling and network checks. Version 1.1."
 h1: "The Excel template that becomes a 3D twin"
 navLabel: "Excel template"
 directAnswer: "The DC Sim template is one Excel workbook with seven sheets: Devices, Cables, Racks, Power, Networks, Cooling and Readings. Only Devices is required: rack, U position and model per row. Each extra sheet unlocks another layer of the twin. Import it and you get the room in 3D plus a check list of overlaps, overloads and single points of failure."
@@ -30,7 +30,9 @@ Additions only, so 1.0 files still import:
 - **Power:** `phase`, plus `runtime_min` and `battery_kwh` on UPS rows; the `type` column accepts `wall outlet`.
 - **Racks:** `width_in` (19 by default, 10 for mini racks).
 
-The checks that use the new columns, per-phase balance and UPS runtime from your own values, are on the roadmap <span class="badge badge-roadmap">Roadmap</span>; filling them in now means your file is ready.
+What they do: phases give a per-phase load and a phase-balance check on every three-phase node (80 % per phase, imbalance above 15 % flagged); `runtime_min` or `battery_kwh` set the UPS runtime ahead of the catalog value; `width_in` = 10 draws a mini rack (also inferred from a name like "Mini rack 2").
+
+**Devices without a U:** a row with an empty `u` is kept as a device outside a rack; its `rack` value becomes the location, shown as an open shelf (for example a switch on the NOC desk). It is never skipped.
 
 ## What happens at import
 
