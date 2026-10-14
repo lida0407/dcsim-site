@@ -13,7 +13,7 @@ faq: [{"q": "Can the twin be installed on-premises?", "a": "The same container r
 
 1. **Browser:** receives frames and diagrams; the web bundle contains no secrets and no engine code.
 2. **Server:** the simulation engine, the importer and the catalog run on the server; each customer is a separate organisation with its own sites, versions and history.
-3. **Agent (with live connectors, on the roadmap):** a single binary inside your network that polls your sources and sends metric values over one outbound WebSocket. No listening port. Credentials stay in its config file on your machine.
+3. **Agent (for Zabbix, NetBox and future connectors inside your network):** a single binary inside your network that polls your sources and sends metric values over one outbound WebSocket. No listening port. Credentials stay in its config file on your machine.
 4. **Storage:** model and readings in a Postgres-compatible database per deployment.
 5. **Editions:** the English edition is Sensaka's, hosted in the EU; the Chinese-language edition is operated by CloudSino in China. The two do not share data.
 

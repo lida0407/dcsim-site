@@ -8,9 +8,10 @@ section: "product"
 order: 4
 badge: "available"
 badgeNote: "Design mode runs today. The AI design assistant and Excel/BOM export are on the roadmap."
-shots:
-  - { name: "power-diagram", alt: "Power one-line diagram of the demo hall: utility and generator into an ATS, UPS-A and UPS-B, panels A and B, and two columns of rack PDUs with load bars.", caption: "Every design gets its power chain as a one-line diagram, with load on each node." }
 faq: [{"q": "Is the AI design assistant available now?", "a": "Not yet. It is on the roadmap and comes first to Design-license customers as early access. Design mode itself (plan, checks, N−1 audit, versions) runs today."}, {"q": "What does a Design license include today?", "a": "Design mode with all checks and the N−1 audit, full what-if, three months per project (extendable), and the hand-off to Monitor with three months free. Excel/BOM export and the AI design assistant are on the roadmap."}, {"q": "Can I design from an existing room?", "a": "Yes. Import the room and change it: add a row, swap to liquid-cooled racks, move a cooler. The checks and the audit show what the change does."}, {"q": "Does it produce drawings for the contractor?", "a": "Not yet. Today you get the 3D and 2D views and the checks; export of the design as a filled template and a BOM, and DXF/IFC import, are on the roadmap."}, {"q": "What does the catalog know about a model?", "a": "Size, weight, power, airflow, cooling type and the parts inside, from public documentation. Performance fields (compute, GPU throughput, storage IOPS, network bandwidth) are being added for sizing."}]
+shots:
+  - { name: "design-n1-audit", alt: "Design mode on the 2D plan of the demo hall with the N−1 resilience audit: the generator and each AC unit ride through, UPS-A and UPS-B each cause an outage with devices, services, tripped breakers and tokens lost listed.", caption: "N−1 audit: fail each UPS, feed and cooling unit in turn and read what survives." }
+  - { name: "power-diagram", alt: "Power one-line diagram of the demo hall: utility and generator into an ATS, UPS-A and UPS-B, panels A and B, and the rack PDUs with load bars.", caption: "Every design gets its power chain as a one-line diagram, with load on each node." }
 ---
 
 ## What you do in Design mode

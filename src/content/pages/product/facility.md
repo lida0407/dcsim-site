@@ -8,10 +8,15 @@ section: "product"
 order: 1
 badge: "available"
 badgeNote: "All five layers run on the demo rooms and on any file you import."
-shots:
-  - { name: "power-fail-ups-a", alt: "Power one-line diagram of the demo hall with UPS-A failed: feed A greyed out, a banner listing devices on one feed and PDU-R05-B overloaded.", caption: "Power: fail UPS-A and read who goes dark, who runs on one feed, and which PDU overloads." }
-  - { name: "air-topdown", alt: "Top-down Air view with an inlet-temperature heat map across two rows of racks, a row of cooling units along one wall.", caption: "Air: inlet temperatures across the room, projected by a zonal model (estimated)." }
 faq: [{"q": "Are the temperatures real?", "a": "Readings you import are real values from your room. Anything the model projects, such as minutes to threshold, the heat map between sensors or runtime without a UPS reading, carries an \"estimated\" tag."}, {"q": "Do I need a raised floor or a BMS?", "a": "No. The Racks and Cooling sheets are enough to start. Sensor history can be added as a Readings sheet today; live BMS and sensor connectors are on the roadmap."}, {"q": "Can it model 2N and N+1?", "a": "Yes. Feeds A and B, an ATS built from fed_from lists, generators and UPS modules; the N−1 audit in Design mode and the Fail what-if both use the same chain."}, {"q": "Does it check phase balance?", "a": "Yes, when your sheets say which phase each cable or power item is on (template v1.1). Every three-phase node is checked against 80 % per phase, and an imbalance above 15 % is flagged. Without phase data the import report says phase balance was not checked."}, {"q": "Is the fire layer a compliance tool?", "a": "It shows the sequence and the affected racks and services. It is not a substitute for a fire engineer's design or an authority's approval."}]
+shots:
+  - { name: "water-gpu-row", alt: "Water layer of a 96-rack hall: a liquid-cooled GPU row coloured by coolant return temperature (estimated), with CDUs and UPS units in the background.", caption: "Water: coolant return temperature along a liquid-cooled GPU row, estimated." }
+  - { name: "fire-sequence", alt: "Fire scenario in pod A: zones on a top-down plan, and a side panel with the outage summary, 4 devices off, 6.6M tokens lost and a timeline from smoke in R13 to the service going down.", caption: "Fire: smoke in one zone, the sequence on a timeline, the devices and services affected." }
+  - { name: "air-topdown", alt: "Top-down Air view of the demo hall with an inlet-temperature heat map from 16 to 36 °C, labelled estimated, and three AC units along one wall.", caption: "Air: inlet temperatures across the room, estimated by a zonal model." }
+  - { name: "power-fail-ups-a", alt: "Power one-line diagram with UPS-A failed: feed A greyed out, a banner listing devices on one feed and PDU-R05-B overloaded.", caption: "Power: fail UPS-A and read who goes dark, who runs on one feed, and which PDU overloads." }
+clips:
+  - { name: "crah-stops", title: "Cooling unit AC-1 stops", caption: "AC-1 stops at peak load: minutes to 27, 32 and 35 °C, estimated by a zonal model, not CFD (31 s)." }
+  - { name: "leak", title: "Manifold leak on a liquid-cooled GPU row", caption: "A manifold leaks: 1.4 litres released (estimated), the valve isolates it, 7.8M tokens lost (31 s)." }
 ---
 
 ## Floor: "Will it fit?"

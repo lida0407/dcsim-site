@@ -8,6 +8,8 @@ section: "resources"
 order: 1
 ctaTop: true
 faq: [{"q": "Can I use CSV instead?", "a": "Yes: one CSV per sheet with the same columns; the importer reads comma, semicolon and tab separators."}, {"q": "What if my spreadsheet uses different column names?", "a": "Common synonyms are recognised; anything else can be renamed in the header row. The order of the columns does not matter."}, {"q": "Do I need all seven sheets?", "a": "No. Devices alone gives you the 3D room and rack power; add sheets as you have the data."}, {"q": "Is my file stored?", "a": "The import runs on the server, reads values only and builds your model. Ask us to delete the model and the file and we confirm within 30 days. See Security & data."}, {"q": "Does the template change?", "a": "Sheet and column names are a fixed contract shared with the homelab edition. New optional columns may be added, as in version 1.1; existing ones are never renamed."}]
+clips:
+  - { name: "excel-to-3d", title: "From an Excel file to a 3D twin", caption: "The Devices and Cables sheets, import, checks pinned in 3D, then a re-upload with its change list (48 s)." }
 ---
 
 ## What each sheet unlocks

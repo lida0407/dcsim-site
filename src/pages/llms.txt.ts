@@ -15,7 +15,7 @@ export const GET: APIRoute = async () => {
 
 > ${PRODUCT_NAME} by ${COMPANY} is a browser-based data center simulator. One Excel file (racks, devices, power chain, cables) becomes a 3D twin with Floor, Air, Water, Fire, Power, Cabling, Network, Device and Token layers. Click any power, cooling or network node, press Fail, and see which racks go dark and which services stop. Thermal and runtime projections come from a zonal model and are labelled "estimated"; it is not CFD.
 
-Status: the product runs today on demo data and on imported files, shown in walkthroughs. Self-serve accounts, checkout, live monitoring connectors (Zabbix and NetBox first) and the AI design assistant are on the roadmap. Pricing: Design from $${PRICES.design[0].price} one-time per project; Monitor $${PRICES.monitorPerRack} per rack per month, minimum $${PRICES.monitorMin}; partners earn a ${PRICES.partnerMargin} % margin. Contact: ${CONTACT_EMAIL}.
+Status: the product runs today on demo data and on imported files, shown in walkthroughs. Zabbix and NetBox connect directly with a read-only token (tested against live demo instances); other live connectors, self-serve accounts, checkout and the AI design assistant are on the roadmap. Pricing: Design from $${PRICES.design[0].price} one-time per project; Monitor $${PRICES.monitorPerRack} per rack per month, minimum $${PRICES.monitorMin}; partners earn a ${PRICES.partnerMargin} % margin. Contact: ${CONTACT_EMAIL}.
 
 ## Main pages
 ${line("Home", "", "What DC Sim is, the three advantages, how it works.")}

@@ -8,15 +8,19 @@ section: "product"
 order: 5
 badge: "available"
 badgeNote: "Runs on the demo rooms and on any file you import."
-shots:
-  - { name: "simulate", alt: "Simulate panel listing scenarios with run buttons and durations: utility outage, outage with generator failing to start, lose UPS-A at peak load, AC-1 stops, next to the 3D room.", caption: "The scenario library, generated from the model of your room." }
-  - { name: "power-fail-ups-a", alt: "Power one-line diagram with UPS-A failed and a banner listing the devices on one feed and an overloaded PDU.", caption: "Fail: the instant answer on the one-line diagram, then Simulate it for the timeline." }
 faq: [{"q": "How accurate is the simulation?", "a": "Power and network what-if are exact for the chain you describe: if the sheet says a device has one cord on feed A, it goes dark when A fails. Thermal, liquid and runtime projections are zonal-model estimates and are labelled \"estimated\". Nothing here is CFD."}, {"q": "Can I run scenarios on a design that is not built yet?", "a": "Yes. Design and Simulate use the same model; the N−1 audit is a batch of these scenarios."}, {"q": "Does a scenario change my twin?", "a": "No. Every scenario runs next to an untouched baseline; nothing is written to the model of your room."}, {"q": "Can I schedule drills or share results?", "a": "Export the incident log today; scheduled drills and shared links are on the roadmap."}, {"q": "What does \"tokens lost\" mean?", "a": "The tokens per second the affected GPU nodes were producing, summed over the scenario's duration: the serving capacity a failure would cost, at the measured or estimated rate."}]
+shots:
+  - { name: "simulate", alt: "Simulate panel listing scenarios with run buttons and durations: utility outage, outage with the generator failing to start, lose UPS-A at peak load, AC-1 stops, next to the 3D room.", caption: "The scenario library, generated from the model of your room." }
+  - { name: "replay", alt: "Replay panel listing the week's critical and major alarms (a cooling unit failure, thermal shutdowns of GPU servers, an inference service down), with the room shown at the time of the selected alarm.", caption: "Replay: every critical and major alarm of the week; click one and the room jumps there." }
+clips:
+  - { name: "feed-a-fails-lightsoff", title: "Lose feed A at peak, lights off", caption: "Lose feed A at peak: single-corded devices go dark, the other PDU overloads, Monitoring and Backups stop (31 s)." }
+  - { name: "crah-stops", title: "Cooling unit AC-1 stops", caption: "AC-1 stops at peak load: minutes to 27, 32 and 35 °C, estimated by a zonal model, not CFD (31 s)." }
+  - { name: "leak", title: "Manifold leak on a liquid-cooled GPU row", caption: "A manifold leaks: 1.4 litres released (estimated), the valve isolates it, 7.8M tokens lost (31 s)." }
 ---
 
 ## Two speeds of what-if
 
-**Fail (instant).** Click any node in the power one-line, the network topology or the 3D room and press Fail. A graph propagation runs on the server: power failures darken devices, the network graph loses them, and the diagram, the 3D view (rack tint, device colours, dead cables) and a banner show the result at once, for example "Fail UPS-A: 90 run on one feed, overloaded: PDU-R05-B".
+**Fail (instant).** Click any node in the power one-line, the network topology or the 3D room and press Fail. A graph propagation runs on the server: power failures darken devices, the network graph loses them, and the diagram, the 3D view (rack tint, device colours, dead cables) and a banner show the result at once, for example "Fail UPS-A — 3 devices lose power · 90 run on one feed · stopped: Monitoring, Backups · overloaded: PDU-R05-B 137.3%".
 
 **Simulate it (timeline).** The same failure through the full simulator (battery runtime, generator start, breaker curves, thermal transients, tokens lost), minute by minute, next to the baseline. Estimated values are labelled.
 

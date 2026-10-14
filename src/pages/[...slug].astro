@@ -4,6 +4,7 @@ import Base from "../layouts/Base.astro";
 import Badge from "../components/Badge.astro";
 import Faq from "../components/Faq.astro";
 import Shot from "../components/Shot.astro";
+import Clip from "../components/Clip.astro";
 import TemplateCTA from "../components/TemplateCTA.astro";
 import PricingStrip from "../components/PricingStrip.astro";
 import { faqLd, softwareLd } from "../lib/schema";
@@ -55,6 +56,13 @@ const jsonLd = [
       </div>
     )}
     <div class="prose"><Content /></div>
+    {d.clips.length > 0 && (
+      <section class="section" aria-label="Clips">
+        <div class={`grid ${d.clips.length > 1 ? "grid-2" : ""}`}>
+          {d.clips.map((c) => <Clip name={c.name} title={c.title} caption={c.caption} />)}
+        </div>
+      </section>
+    )}
     <Faq items={d.faq} />
     {d.section === "product" && <PricingStrip />}
     {!d.ctaTop && <TemplateCTA compact={d.section === "company"} />}

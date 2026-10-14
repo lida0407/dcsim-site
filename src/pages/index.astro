@@ -1,6 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import Shot from "../components/Shot.astro";
+import Clip from "../components/Clip.astro";
 import Badge from "../components/Badge.astro";
 import Faq from "../components/Faq.astro";
 import PricingStrip from "../components/PricingStrip.astro";
@@ -11,8 +12,8 @@ import { u } from "../lib/url";
 
 const faq = [
   { q: `What is ${PRODUCT_NAME}?`, a: `A browser-based data center simulator by ${COMPANY}: one Excel import becomes a 3D twin with floor, air, water, fire, power, cabling, network, device and token layers, and any power, cooling or network node can be failed to see what goes dark.` },
-  { q: "Can I sign up today?", a: "Not yet. The product runs today on demo data and on files you send us; we walk you through your own room on a call. Self-serve accounts, checkout and live connectors are on the roadmap." },
-  { q: "Do I have to install anything?", a: "No. The twin runs in the browser. Live data from your monitoring will come through a small agent inside your network that only dials out (on the roadmap); today, readings come in as a sheet exported from any monitoring tool." },
+  { q: "Can I sign up today?", a: "Not yet. The product runs today on demo data and on files you send us; we walk you through your own room on a call. Self-serve accounts and checkout are on the roadmap." },
+  { q: "Do I have to install anything?", a: "No. The twin runs in the browser. Zabbix and NetBox connect with a URL and a read-only token; inside your own network the same connectors run in a small agent that only dials out. Any other tool's export comes in as a sheet." },
   { q: "Is this CFD?", a: "No. Air and water layers use a zonal model and every projected number is labelled estimated. It is built for questions like \"what happens if this cooling unit stops\", not for detailed airflow engineering." },
   { q: "How much does it cost?", a: "Monitor is about $5 per rack per month with a $49 minimum. Design is one-time per project from $490. Integrators and MSPs earn a 30 % margin as partners." },
   { q: "Is there a Chinese edition?", a: "Yes. The Chinese-language edition is distributed by our partner CloudSino." },
@@ -36,7 +37,7 @@ const demoHref = DEMO_URL ?? mailto("DC Sim walkthrough", "Hi Da,\n\nI'd like a 
       </div>
       <p class="small muted" style="margin-top:12px">Built by data-center people. Runs in the browser. Estimated where we estimate, labelled every time.</p>
       <div class="hero-shot">
-        <Shot name="overview" alt="DC Sim overview of a demo data hall in 3D: two rows of racks, cooling units and UPS cabinets, with the View and Mode menus and the time slider." eager />
+        <Shot name="hero-lightsoff" alt="DC Sim with the lights off: a dark data hall where only the server LEDs, the hot- and cold-aisle strips and the NOC wall screen glow." caption="Lights off: what still glows is what is running." eager />
       </div>
     </section>
 
@@ -55,8 +56,8 @@ const demoHref = DEMO_URL ?? mailto("DC Sim walkthrough", "Hi Da,\n\nI'd like a 
         </div>
         <div class="card">
           <h3>On top of the monitoring you run</h3>
-          <p>{PRODUCT_NAME} does not replace your monitoring or DCIM. Today any tool's export comes in through the Readings sheet; Zabbix and NetBox will be the first live connectors.</p>
-          <p class="small muted">Live connectors: <Badge kind="roadmap" /></p>
+          <p>{PRODUCT_NAME} does not replace your monitoring or DCIM. Zabbix and NetBox connect with a URL and a read-only token: inventory, readings and alarms become the twin. Every other tool comes in as a sheet export.</p>
+          <p class="small muted">Zabbix and NetBox: <Badge kind="available" /> · other connectors: <Badge kind="roadmap" /></p>
         </div>
         <div class="card">
           <h3>Device data that knows the hardware</h3>
@@ -77,10 +78,10 @@ const demoHref = DEMO_URL ?? mailto("DC Sim walkthrough", "Hi Da,\n\nI'd like a 
     <section class="section">
       <h2 style="margin-top:0">The demo moment</h2>
       <div class="grid grid-2">
-        <Shot name="power-fail-ups-a" alt="Power one-line diagram with UPS-A failed: feed A paths greyed out, a banner lists devices on one feed and an overloaded PDU." caption="Fail UPS-A at peak: who goes dark, who runs on one feed, which PDU overloads." />
-        <Shot name="air-topdown" alt="Top-down Air view of the demo hall with an inlet-temperature heat map between rows of racks and three cooling units." caption="Air layer: inlet temperatures across the room. Projections are estimated by a zonal model, not CFD." />
-        <Shot name="simulate" alt="Simulate panel listing scenarios such as utility outage, generator fails to start, lose UPS-A at peak load and AC-1 stops, next to the 3D room with cabling shown." caption="Scenario library generated from your model; each run beside an untouched baseline." />
-        <Shot name="network-fail" alt="Network topology with a spine switch failed: affected links in red, a banner showing devices that lose every network path." caption="Fail a spine switch: who loses every path, who keeps a backup uplink." />
+        <Clip name="feed-a-fails-lightsoff" title="Lose feed A at peak, with the lights off" caption="Lose feed A at peak: single-corded devices go dark, the other PDU overloads, services stop (31 s)." />
+        <Clip name="crah-stops" title="Cooling unit AC-1 stops" caption="A cooling unit stops: minutes to 27, 32 and 35 °C, estimated by a zonal model, not CFD (31 s)." />
+        <Clip name="leak" title="Manifold leak on a liquid-cooled GPU row" caption="A manifold leaks: litres released (estimated), the valve isolates, tokens lost (31 s)." />
+        <Clip name="excel-to-3d" title="From an Excel file to a 3D twin" caption="One Excel file in, the room in 3D, checks pinned, a change list on re-upload (48 s)." />
       </div>
     </section>
 
@@ -95,7 +96,7 @@ const demoHref = DEMO_URL ?? mailto("DC Sim walkthrough", "Hi Da,\n\nI'd like a 
 
     <section class="section">
       <h2 style="margin-top:0">Works alongside your tools</h2>
-      <p>Zabbix · NetBox · Prometheus and Grafana · SolarWinds · ManageEngine OpManager · Sunbird dcTrack · PRTG · CloudSino. Today every one of them reaches the twin as an export through the template sheets; Zabbix and NetBox will be the first live connectors <Badge kind="roadmap" />.</p>
+      <p>Zabbix · NetBox · Prometheus and Grafana · SolarWinds · ManageEngine OpManager · Sunbird dcTrack · PRTG · CloudSino. Zabbix and NetBox connect directly <Badge kind="available" />; every other tool reaches the twin as an export through the template sheets.</p>
       <p><a href={u("integrations/")}>Integration status, tool by tool</a></p>
     </section>
 

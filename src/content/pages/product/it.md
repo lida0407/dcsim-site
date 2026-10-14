@@ -8,9 +8,11 @@ section: "product"
 order: 3
 badge: "available"
 badgeNote: "Both layers run on the demo rooms and on imported files. Live token and power counters from your systems need connectors, which are on the roadmap."
-shots:
-  - { name: "cabling-trace", alt: "Monitor panel showing IT load 53.5 kW, PUE 1.19, 249k tokens per second, 16.7M tokens per kWh, hottest inlet 19.3 °C and the GPU servers producing the most tokens, next to a traced network cable.", caption: "Monitor on the demo hall: IT load, PUE, tokens per second, tokens per kWh and the top token producers." }
 faq: [{"q": "What do I need for tokens per kWh?", "a": "A token counter from your serving stack and a power reading for the same server. Today both can come in as history through the Readings sheet; live collection through connectors is on the roadmap."}, {"q": "Does it work for training as well as inference?", "a": "Token counters come from serving stacks. Training jobs show GPU utilisation and power; tokens per kWh for training needs a job-level counter, which is on the roadmap."}, {"q": "Can it tell me which GPUs are idle?", "a": "Monitor shows per-node utilisation and tokens per second; a ranked idle-GPU report is on the roadmap."}, {"q": "Is the device catalog complete?", "a": "No catalog is. Known models are filled in; unknown ones are plain boxes with the height you gave, flagged \"identify later\". Send us a spec sheet and it is added."}, {"q": "Can I see component-level telemetry?", "a": "Where a source provides it, on the part inside the dissected device: from imported readings today, from connectors when they ship."}]
+shots:
+  - { name: "token-view", alt: "Token layer of a 96-rack hall coloured by tokens per kWh (estimated), with a Monitor panel ranking the GPU servers producing the most tokens per second and per kWh.", caption: "Token: tokens per kWh per server as colour, and the servers producing the most tokens." }
+  - { name: "device-dissect", alt: "A GPU server dissected above its rack position: top cover, eight GPUs, CPUs, memory, fans, NICs, power supplies, baseboard and front bezel, each labelled.", caption: "Device: open a server in its rack and take it apart." }
+  - { name: "report", alt: "Report for the demo hall over 168 hours: IT and facility energy, average PUE, peak IT, CO2, energy cost, lighting costs and savings, total tokens and tokens per IT and per facility kWh.", caption: "Report: energy, PUE, CO₂, cost, lighting and tokens per kWh for the week." }
 ---
 
 ## Device: "Open it. What's inside, and who depends on it?"

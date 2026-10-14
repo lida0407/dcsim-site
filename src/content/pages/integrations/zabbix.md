@@ -1,50 +1,57 @@
 ---
 title: "Zabbix data center visualization in 3D — DC Sim"
-description: "Put Zabbix hosts and item values (temperatures, power, UPS runtime) on a 3D twin of your room. Readings import today; live connector on the roadmap."
+description: "Connect Zabbix with a URL and a read-only token: hosts, latest values and open problems land on a 3D twin of your room, with what-if on top."
 h1: "Zabbix, visualised in 3D"
 navLabel: "Zabbix"
-directAnswer: "Zabbix keeps monitoring; DC Sim adds the room, the what-if and the token layer. Today you bring Zabbix values in as a Readings sheet. The live Zabbix connector reads hosts, items and problems through the Zabbix API with a read-only token, and turns them into the same template sheets; it is on the roadmap until it passes its test against a demo instance."
+directAnswer: "DC Sim reads Zabbix through its API with a read-only token: hosts and their inventory, the latest values of power, temperature, UPS, CPU and traffic items, and the open problems. Hosts are matched to the devices in your twin, values become readings, problems become alarms. Zabbix keeps monitoring; DC Sim adds the room, the what-if and the token layer."
 section: "integrations"
 order: 1
-badge: "roadmap"
-badgeNote: "Readings import today. Live connector: built into the agent, being tested against a Zabbix 6.0 demo instance."
-faq: [{"q": "Is the Zabbix integration live today?", "a": "Not yet. Today you export values from Zabbix into the Readings sheet. The live connector is built and is being tested against a demo instance; this page changes to Available when that test is logged."}, {"q": "What credentials will it need?", "a": "A Zabbix API token for a read-only user (Zabbix 6.0 or later), or a read-only username and password. The token stays inside your network, in the agent's configuration."}, {"q": "Will it change anything in Zabbix?", "a": "No. It reads hosts, items, history and problems. Writing anything back is not planned without an explicit opt-in."}, {"q": "My item names are different. Will it still work?", "a": "The mapping goes by key and unit, not by name: anything with a temperature, watt, load-percent or runtime unit is recognised, and leftover series can be bound by hand."}]
+badge: "available"
+badgeNote: "Tested against a live Zabbix 6.0 demo instance (1,417 hosts) with a read-only token. Zabbix 6.0 and later."
+shots:
+  - { name: "monitor-kpis", alt: "Monitor panel over the demo hall: IT load 79.1 kW, PUE 1.16, 488k tokens per second, 22.2M tokens per kWh, hottest inlet 19.6 °C, and two alarms for rack R05 feeds at 86 % of rating with advice.", caption: "Readings and alarms on the room: what a Zabbix problem looks like next to the rack it belongs to." }
+faq: [{"q": "Which Zabbix versions work?", "a": "Zabbix 6.0 and later, with an API token or a read-only username and password. It was tested against Zabbix 6.0."}, {"q": "What credentials does it need?", "a": "An API token for a read-only Zabbix user. Inside your own network the token stays in the agent's configuration; it is never shown in the browser."}, {"q": "Does it change anything in Zabbix?", "a": "No. It reads hosts, items and problems. Nothing is written to Zabbix."}, {"q": "My item names are different. Will it still work?", "a": "The mapping goes by item key and unit, not by name: anything with a temperature, watt, load-percent or runtime unit is recognised. Hosts are matched to devices by name, and the preview tells you how many matched."}]
 ---
 
 ## What you get
 
-- **Power layer:** UPS load, runtime and battery charge on the one-line diagram, with PDU and IPMI power on the devices. Click the UPS, press **Fail**, and see which racks go dark and which services stop.
-- **Air layer:** temperature items become rack-inlet or exhaust readings; the room colours itself and "minutes to 27, 32 and 35 °C" is estimated when a cooling unit is failed.
-- **Device layer and alarms:** CPU load and ping on each server in its rack; Zabbix problems appear as alarms on the matching device, with its workloads and tenants.
+- **Power layer:** UPS load, runtime and battery charge on the one-line diagram; PDU and IPMI power on the devices. Click the UPS, press **Fail**, and see which racks go dark and which services stop.
+- **Air layer:** temperature items become rack-inlet or exhaust readings; the room colours itself, and "minutes to 27, 32 and 35 °C" is estimated when a cooling unit is failed.
+- **Alarms on the device:** open Zabbix problems appear as alarms on the matching device, next to its workloads and tenants.
 
-## What you can do today
+## How to connect
 
-Export recent values from Zabbix (item history as plain values, per host) and put them in the **Readings** sheet of the template: `time`, `item` (the host name), `metric`, `value`. Use metric names such as `power_w`, `inlet_c`, `ups_runtime_min` or `util_pct` and the simulation uses them directly; anything else is kept as a series you can bind by hand. Put the hosts themselves in the **Devices** sheet (rack, U, model). Then import as usual.
+1. In Zabbix, create an API token for a read-only user (or use a read-only username and password).
+2. In DC Sim, open **⋯ → Connect NetBox or Zabbix**, choose Zabbix, paste the URL and the token, press **Test**. Test shows the Zabbix version and how many hosts, items and open problems it can see.
+3. **Preview** shows how many hosts match devices in your twin, and the readings and alarms that will be added.
+4. **Import.** Each sync adds the latest readings and the open problems.
 
-## How the live connector will work
+Inside your own network, the same connector runs in the DC Sim agent, which only dials out.
 
-1. **Connect:** paste the Zabbix URL and a read-only API token, press **Test**. The test shows the Zabbix version, how many hosts it can see and whether the permissions are read-only.
-2. **Preview:** hosts become the Devices sheet (inventory fields such as location, rack, model and serial where you keep them), item history becomes the Readings sheet, open problems become alarms. You see the same import report and checks as an Excel upload.
-3. **Import and re-sync:** confirm to build or update the twin; every re-sync shows a change list first.
+## What we read
 
-| Zabbix | DC Sim template |
-|---|---|
-| host name, host inventory (location, rack, model, serial) | Devices: name, rack, model, serial |
-| item history: power (PDU, UPS, IPMI) | Readings: `power_w` |
-| item history: inlet or ambient temperature | Readings: `inlet_c` |
-| item history: current | Readings: `current_a` |
-| item history: interface traffic | Readings: `link_mbps` |
-| item history: UPS runtime, load, battery | Readings: `ups_runtime_min`, `ups_load_pct`, `ups_battery_pct` |
-| open problems | alarms on the matching device |
+| Zabbix | DC Sim | Layer |
+|---|---|---|
+| hosts and host inventory (location, rack, model, serial) | matched to devices by name | Device |
+| power items (PDU, UPS, IPMI) | `power_w` | Power, Token |
+| inlet or ambient temperature items | `inlet_c` | Air |
+| CPU temperature, fan speed, humidity | `cpu_temp_c`, `fan_rpm`, `humidity_pct` | Device, Air |
+| UPS runtime, load and battery items | `ups_runtime_min`, `ups_load_pct`, `ups_battery_pct` | Power |
+| CPU utilisation, ping | `util_pct`, up or down | Device, Network |
+| open problems | alarms on the matching device | all |
+
+## Also possible: a sheet export
+
+No API access? Export recent item values per host and put them in the **Readings** sheet of the template (`time`, `item`, `metric`, `value`), with the hosts in the **Devices** sheet.
 
 ## Later
 
 | Item | Status |
 |---|---|
-| Live connector: hosts, items, history and problems through the agent | <span class="badge badge-roadmap">Roadmap</span> (in testing) |
-| Rack positions from host inventory, automatically | <span class="badge badge-roadmap">Roadmap</span> |
+| Rack positions taken from host inventory automatically | <span class="badge badge-roadmap">Roadmap</span> |
+| Alarms kept across server restarts (today: the last 24 hours, in memory) | <span class="badge badge-roadmap">Roadmap</span> |
 | A Zabbix template for listing where Zabbix users look for integrations | <span class="badge badge-roadmap">Roadmap</span> |
 
 ## Nothing inbound
 
-For your own network, the connector runs in a small agent inside it that dials out over one WebSocket and never listens on a port. If the link drops, batches spool to disk and replay in order. The Zabbix token stays in the agent's configuration; DC Sim receives metric values only.
+For a Zabbix inside your network, the connector runs in a small agent that dials out over one WebSocket and never listens on a port. If the link drops, batches spool to disk and replay in order. The token stays in the agent's configuration; DC Sim receives values and problems only.

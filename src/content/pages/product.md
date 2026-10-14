@@ -7,8 +7,9 @@ directAnswer: "A data center digital twin is a model of your room that answers \
 section: "product"
 order: 0
 shots:
+  - { name: "hero-lightsoff", alt: "A 96-rack hall with the lights off: only server LEDs, aisle strips and the NOC wall screen glow.", caption: "Lights off: the same twin, dark, with every running device lit by its own LEDs." }
   - { name: "view-menu", alt: "DC Sim with the View menu open over the 3D demo hall: Overview, then Facility (Floor, Air, Water, Fire, Power), Connectivity (Cabling, Network) and IT (Device, Token), each with a one-line hint and an issue count.", caption: "One View menu: nine layers in three groups, with an issue count per view." }
-faq: [{"q": "How long does the first twin take?", "a": "Minutes if your Devices sheet is ready: rack, U and model per row. The catalog fills in size, weight, power and parts for known models; unknown models become plain boxes marked \"identify later\"."}, {"q": "What happens if my spreadsheet has errors?", "a": "Bad rows never block the import. Each skipped row is listed with its sheet, row and reason; checks like U overlaps, overweight racks and breakers over 80 % are pinned in 3D."}, {"q": "Can I use CSV instead of Excel?", "a": "Yes: the same sheets as CSV or TSV files (comma, semicolon or tab; UTF-8, UTF-16 or GBK). Up to 10 MB per file and 50,000 rows per sheet."}, {"q": "Does the twin update when my room changes?", "a": "Re-upload the file: devices are matched by serial, then name, then rack and U, and you get a change list before anything is applied. Live connectors to your monitoring are on the roadmap."}, {"q": "Is it a DCIM?", "a": "It sits on top of DCIM and monitoring rather than replacing them. It documents less and simulates more: the point is \"fail this, see what goes dark\", not asset accounting."}]
+faq: [{"q": "How long does the first twin take?", "a": "Minutes if your Devices sheet is ready: rack, U and model per row. The catalog fills in size, weight, power and parts for known models; unknown models become plain boxes marked \"identify later\"."}, {"q": "What happens if my spreadsheet has errors?", "a": "Bad rows never block the import. Each skipped row is listed with its sheet, row and reason; checks like U overlaps, overweight racks and breakers over 80 % are pinned in 3D."}, {"q": "Can I use CSV instead of Excel?", "a": "Yes: the same sheets as CSV or TSV files (comma, semicolon or tab; UTF-8, UTF-16 or GBK). Up to 10 MB per file and 50,000 rows per sheet."}, {"q": "Does the twin update when my room changes?", "a": "Re-upload the file: devices are matched by serial, then name, then rack and U, and you get a change list before anything is applied. Connected Zabbix and NetBox sources re-sync the same way."}, {"q": "Is it a DCIM?", "a": "It sits on top of DCIM and monitoring rather than replacing them. It documents less and simulates more: the point is \"fail this, see what goes dark\", not asset accounting."}]
 ---
 
 ## One canvas, one View menu
@@ -38,6 +39,10 @@ The whole screen is the room. A **View** menu switches the lens; a **Mode** menu
 
 **Fail** runs a fast graph propagation on the server: power failures darken devices, the network graph loses them, and the diagram, the 3D view and the banner update at once. **Simulate it** replays the same failure through the full simulator (batteries, generator start, thermal transients, breaker curves, tokens lost), so you see the timeline, not just the end state.
 
+## Lights on, lights off
+
+Press **L**, or pick Lights Off in the View menu, and the room goes dark the way a real hall does: what still glows is what is running. Every LED on a device front blinks with that device's simulated load, screens and aisle strips stay lit, and devices that are off go dark. Auto switches the lights on a schedule, and the Power layer shows the lighting load and what the dark saves each month.
+
 ## Built for honesty
 
 - Zonal thermal and fluid models with "estimated" labels. Not CFD, and we never say it is.
@@ -47,4 +52,5 @@ The whole screen is the room. A **View** menu switches the lens; a **Mode** menu
 ## Two ways in
 
 - **Excel or CSV**, available today: the Devices sheet is required, six more are optional. → [the Excel template](/resources/excel-template/)
-- **Live data from your monitoring** <span class="badge badge-roadmap">Roadmap</span>: Zabbix and NetBox first, through a small agent that only dials out. Until then, any tool's export fits the Readings sheet. → [Integrations](/integrations/)
+- **Zabbix and NetBox**, available: paste a URL and a read-only token, press Test, preview, import. NetBox brings racks, devices, cables, power and VLANs; Zabbix brings readings and alarms. → [Integrations](/integrations/)
+- **Other monitoring tools** <span class="badge badge-roadmap">Roadmap</span> for live connectors; today any tool's export fits the Readings sheet.

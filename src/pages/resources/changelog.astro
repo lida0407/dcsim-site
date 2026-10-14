@@ -6,6 +6,24 @@ import { u } from "../../lib/url";
 const entries = [
   {
     date: "2026-10-14",
+    title: "Connect Zabbix and NetBox",
+    items: [
+      "Connect NetBox or Zabbix from the ⋯ menu: paste the URL and a read-only API token, press Test, preview, import. Tested against live demo instances (NetBox 4.7 with 24 sites, Zabbix 6.0 with 1,417 hosts).",
+      "NetBox: pick one site; its racks, devices, cables, power panels, feeds and PDUs, and VLANs become the template sheets, with the same import report and checks as an Excel upload. Older and newer token formats both work.",
+      "Zabbix: hosts are matched to devices by name; power, temperature, UPS and CPU values become readings; open problems become alarms on the device.",
+      "Inside your own network, the same connectors run in the agent, which only dials out.",
+    ],
+  },
+  {
+    date: "2026-10-14",
+    title: "Lights off, and a brighter room",
+    items: [
+      "Lights On, Off and Auto: in the dark, every LED on a device front blinks with its simulated load, screens and aisle strips stay lit, devices that are off go dark. The Power layer shows the lighting load and the monthly saving; still 60 frames per second.",
+      "Rooms are drawn bright by default: light tiles, off-white walls and ceiling light panels.",
+    ],
+  },
+  {
+    date: "2026-10-14",
     title: "Template v1.1: phase balance, UPS runtime from your sheet, unracked devices",
     items: [
       "Phase balance: with phases on power cables and power items (L1/L2/L3), every three-phase node shows its per-phase load; a phase above 80 % of its share, or an imbalance above 15 %, is flagged. Without phase data the import report says so.",
@@ -36,14 +54,14 @@ const entries = [
   },
 ];
 const inProgress = [
-  "Zabbix and NetBox connectors (paste URL and read-only token, Test, preview, import), tested against demo instances",
+  "Live connectors for Prometheus and Grafana, Redfish, SNMP and the other monitoring tools",
   "A public demo of the English edition",
   "AI design assistant",
 ];
 ---
 <Base
   title="Changelog — DC Sim"
-  description="What shipped in DC Sim and what is in progress: template v1.1 with phase balance and UPS runtime, the View menu, Excel import, Cabling, Power and Network views."
+  description="What shipped in DC Sim and what is in progress: Zabbix and NetBox connectors, lights off, template v1.1 with phase balance, the View menu, Excel import."
   path="resources/changelog/"
   crumbs={[{ name: "Resources", path: "resources/" }, { name: "Changelog", path: "resources/changelog/" }]}
 >

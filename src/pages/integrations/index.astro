@@ -9,7 +9,7 @@ import { u } from "../../lib/url";
 
 const pages = (await getCollection("pages", (p) => p.data.section === "integrations")).sort((a, b) => a.data.order - b.data.order);
 const faq = [
-  { q: "Which integrations are live today?", a: "None as a live connector yet. Today every tool reaches DC Sim as an export: inventory into the Devices, Racks, Power and Cables sheets, metric history into the Readings sheet. Zabbix and NetBox are the first live connectors and are tested against demo instances before we call them available." },
+  { q: "Which integrations are live today?", a: "Zabbix and NetBox: connect with a URL and a read-only token, preview, import. Both were tested against live demo instances. Every other tool reaches DC Sim as an export through the template sheets; their live connectors are on the roadmap." },
   { q: "Will the connectors need inbound access?", a: "No. Live data will come through a small agent inside your network that only dials out over one WebSocket and never listens on a port." },
   { q: "Will DC Sim write anything into my tools?", a: "No. Reading comes first. Exporting a design back as planned inventory is on the roadmap and will be opt-in per tool." },
   { q: "My tool is not listed. Can I still use it?", a: "Yes, through the Readings sheet (time, item, metric, value) and the inventory sheets. Tell us which tool you run; connectors are built in order of demand." },
@@ -17,7 +17,7 @@ const faq = [
 ---
 <Base
   title="Integrations: Zabbix, NetBox, Prometheus and more — DC Sim"
-  description="DC Sim sits on top of the monitoring and DCIM you already run. Every tool works today through the template sheets; Zabbix and NetBox will be the first live connectors."
+  description="DC Sim sits on top of the monitoring and DCIM you already run. Zabbix and NetBox connect directly; every other tool works today through the template sheets."
   path="integrations/"
   crumbs={[{ name: "Integrations", path: "integrations/" }]}
   jsonLd={[softwareLd(), ...faqLd(faq)]}
@@ -25,7 +25,7 @@ const faq = [
   <article class="container page">
     <header class="page-head">
       <h1>Works alongside the monitoring you already run</h1>
-      <p class="direct-answer">DC Sim does not replace your monitoring or DCIM. It places their data on the rack, PDU or cooling unit it belongs to and lets you fail things. Today every tool reaches the twin as an export through the template sheets. Zabbix and NetBox will be the first live connectors (on the roadmap): paste a URL and a read-only token, press Test, preview, import.</p>
+      <p class="direct-answer">DC Sim does not replace your monitoring or DCIM. It places their data on the rack, PDU or cooling unit it belongs to and lets you fail things. Zabbix and NetBox connect directly: paste a URL and a read-only token, press Test, preview, import. Every other tool reaches the twin today as an export through the template sheets.</p>
     </header>
 
     <h2>Status, tool by tool</h2>
@@ -60,13 +60,13 @@ const faq = [
     </div>
 
     <div class="prose">
-      <h2>How a connector will work</h2>
+      <h2>How a connector works</h2>
       <ol>
-        <li><strong>Connect:</strong> choose the source, paste its URL and a read-only API token, press Test. The test shows the version, what it can see (hosts, racks, devices, cables) and whether the permissions are read-only.</li>
+        <li><strong>Connect:</strong> open ⋯ → Connect NetBox or Zabbix, paste the URL and a read-only API token, press Test. The test shows the version and what it can see (sites, racks, devices, cables; or hosts, items, problems).</li>
         <li><strong>Preview:</strong> the result is rendered as the template sheets (Devices, Cables, Racks, Power, Networks, Readings) with the same import report and checks as an Excel upload.</li>
-        <li><strong>Import:</strong> confirm, and the twin is built. Re-sync works like a re-upload: you see a change list first.</li>
+        <li><strong>Import:</strong> confirm, and the twin is built or updated. Re-sync works like a re-upload: you see a change list first.</li>
       </ol>
-      <p>For your own network, calls run in a small outbound-only agent inside it; tokens never reach the browser.</p>
+      <p>For a system inside your own network, the same connector runs in a small outbound-only agent; tokens never reach the browser.</p>
       <h2>For tool makers</h2>
       <p>If you make one of these tools: we read, we never write without opt-in, we name you on your integration page, and we want to be listed where your users look for integrations. See the <a href={u("partners/")}>partner program</a>.</p>
     </div>

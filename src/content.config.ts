@@ -3,6 +3,7 @@ import { glob } from "astro/loaders";
 
 const faq = z.array(z.object({ q: z.string(), a: z.string() })).default([]);
 const shot = z.object({ name: z.string(), alt: z.string(), caption: z.string().optional() });
+const clip = z.object({ name: z.string(), title: z.string(), caption: z.string().optional() });
 
 const pages = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/pages" }),
@@ -17,6 +18,7 @@ const pages = defineCollection({
     badge: z.enum(["available", "partial", "roadmap", "early", "partner"]).optional(),
     badgeNote: z.string().optional(),
     shots: z.array(shot).default([]),
+    clips: z.array(clip).default([]),
     ctaTop: z.boolean().default(false),
     navLabel: z.string().optional(),
   }),

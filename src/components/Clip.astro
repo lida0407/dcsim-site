@@ -1,0 +1,22 @@
+---
+// A product clip: no autoplay, no preload (Lighthouse-friendly), optimised poster, burned-in captions in the video.
+import { getImage } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import { u } from "../lib/url";
+
+interface Props { name: string; title: string; caption?: string }
+const { name, title, caption } = Astro.props;
+const posters = import.meta.glob<{ default: ImageMetadata }>("../assets/posters/*.png", { eager: true });
+const src = posters[`../assets/posters/${name}.png`]?.default;
+if (!src) throw new Error(`Unknown poster: ${name}`);
+const poster = await getImage({ src, width: 1280, format: "webp", quality: 72 });
+---
+<figure class="shot clip">
+  <video controls muted playsinline preload="none" poster={poster.src} width="1920" height="1080" aria-label={title}>
+    <source src={u(`media/dcsim-${name}.mp4`)} type="video/mp4" />
+  </video>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+<style>
+  .clip video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #000; }
+</style>
