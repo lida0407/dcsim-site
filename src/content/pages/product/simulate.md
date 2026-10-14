@@ -13,14 +13,14 @@ shots:
   - { name: "simulate", alt: "Simulate panel listing scenarios with run buttons and durations: utility outage, outage with the generator failing to start, lose UPS-A at peak load, AC-1 stops, next to the 3D room.", caption: "The scenario library, generated from the model of your room." }
   - { name: "replay", alt: "Replay panel listing the week's critical and major alarms (a cooling unit failure, thermal shutdowns of GPU servers, an inference service down), with the room shown at the time of the selected alarm.", caption: "Replay: every critical and major alarm of the week; click one and the room jumps there." }
 clips:
-  - { name: "feed-a-fails-lightsoff", title: "Lose feed A at peak, lights off", caption: "Lose feed A at peak: single-corded devices go dark, the other PDU overloads, Monitoring and Backups stop (31 s)." }
+  - { name: "feed-a-fails-lightsoff", title: "Lose feed A at peak, lights off", caption: "Lose feed A at peak: single-corded devices go dark and the other PDU overloads (31 s)." }
   - { name: "crah-stops", title: "Cooling unit AC-1 stops", caption: "AC-1 stops at peak load: minutes to 27, 32 and 35 °C, estimated by a zonal model, not CFD (31 s)." }
   - { name: "leak", title: "Manifold leak on a liquid-cooled GPU row", caption: "A manifold leaks: 1.4 litres released (estimated), the valve isolates it, 7.8M tokens lost (31 s)." }
 ---
 
 ## Two speeds of what-if
 
-**Fail (instant).** Click any node in the power one-line, the network topology or the 3D room and press Fail. A graph propagation runs on the server: power failures darken devices, the network graph loses them, and the diagram, the 3D view (rack tint, device colours, dead cables) and a banner show the result at once, for example "Fail UPS-A — 3 devices lose power · 90 run on one feed · stopped: Monitoring, Backups · overloaded: PDU-R05-B 137.3%".
+**Fail (instant).** Click any node in the power one-line, the network topology or the 3D room and press Fail. A graph propagation runs on the server: power failures darken devices, the network graph loses them, and the diagram, the 3D view (rack tint, device colours, dead cables) and a banner show the result at once, for example "Fail UPS-A — 2 devices lose power · 90 run on one feed · overloaded: PDU-R05-B 113.9%".
 
 **Simulate it (timeline).** The same failure through the full simulator (battery runtime, generator start, breaker curves, thermal transients, tokens lost), minute by minute, next to the baseline. Estimated values are labelled.
 
